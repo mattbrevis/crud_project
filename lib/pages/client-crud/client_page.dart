@@ -29,11 +29,9 @@ class _ClientPageState extends State<ClientPage> {
   }
 
   void addClient(){
-      ClientModel clientModel = ClientModel(nameClient: nameController.text, cpfCnpjClient: cpfCnpjController.text, bornDate: DateTime.parse(bornDateController.text) , emailClient: emailController.text, addressClient: addressController.text);
+      ClientModel clientModel = ClientModel(nameClient: nameController.text, cpfCnpjClient: cpfCnpjController.text, bornDate: DateTime.parse('1969-07-20 20:18:04Z') , emailClient: emailController.text, addressClient: addressController.text);
       ClientRepository(virtualDB).insert(clientModel);
-      showDialog(context: context, builder: ((context) {
-        return const AlertDialog(content: Text('Salvo com sucesso'),);
-      }));
+     
       Navigator.pop(context);
   }
 
@@ -138,7 +136,9 @@ class _ClientPageState extends State<ClientPage> {
         color: Colors.white,
         height: 70,
         width: width * 0.85,
-        child: ElevatedButton(child: const Text('Save'),onPressed: (){}),
+        child: ElevatedButton(child: const Text('Save'),onPressed: (){
+          addClient();
+        }),
     ));
   }
 }
