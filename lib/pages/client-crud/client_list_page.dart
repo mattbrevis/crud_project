@@ -1,5 +1,8 @@
+import 'package:crud_project/db/virtual_db.dart';
+import 'package:crud_project/repositories/client_repository.dart';
 import 'package:flutter/material.dart';
 
+import '../../model/client_model.dart';
 import 'client_page.dart';
 
 class ClientListPage extends StatefulWidget {
@@ -10,9 +13,20 @@ class ClientListPage extends StatefulWidget {
 }
 
 class _ClientListPageState extends State<ClientListPage> {
+  List<ClientModel> listClientModel = [];
+  VirtualDB myDataBase = VirtualDB();
+
+  void addDataListClient() async {
+    listClientModel.clear();
+    listClientModel = await ClientRepository(myDataBase).getAll();
+    setState(() {
+      
+    });
+  }
+
   @override
-  void initState() {
-    // TODO: implement initState
+  void initState() {    
+    addDataListClient();    
     super.initState();
   }
 
@@ -22,14 +36,22 @@ class _ClientListPageState extends State<ClientListPage> {
       appBar: AppBar(title: const Text('Client List')),
       body: Container(
         color: Colors.white,
+        child: listClientModel.isNotEmpty? SingleChildScrollView(
+            child: ListView.builder(
+              itemCount: listClientModel.length,
+              itemBuilder: ((context, index) {
+                return Card(
+                    child: Text(listClientModel[index].nameClient),
+                );
+              }))) : const Center(child: Text('No data'),),
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: (() {
-
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientPage()));
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ClientPage()));
+            addDataListClient();
           }),
-          child: const Icon(Icons.save_as_sharp)
-          ),
+          child: const Icon(Icons.save_as_sharp)),
     );
   }
 }

@@ -1,3 +1,6 @@
+import 'package:crud_project/db/virtual_db.dart';
+import 'package:crud_project/model/client_model.dart';
+import 'package:crud_project/repositories/client_repository.dart';
 import 'package:flutter/material.dart';
 
 class ClientPage extends StatefulWidget {
@@ -7,8 +10,13 @@ class ClientPage extends StatefulWidget {
   State<ClientPage> createState() => _ClientPageState();
 }
 
-class _ClientPageState extends State<ClientPage> {
+class _ClientPageState extends State<ClientPage> {  
+  VirtualDB virtualDB = VirtualDB();
   TextEditingController nameController = TextEditingController();
+  TextEditingController cpfCnpjController = TextEditingController();
+  TextEditingController bornDateController = TextEditingController();
+  TextEditingController  emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   Widget getInputLabel(textLabel) {
     return SizedBox(
         width: 100,
@@ -19,6 +27,17 @@ class _ClientPageState extends State<ClientPage> {
               color: Colors.black,
             )));
   }
+
+  void addClient(){
+      ClientModel clientModel = ClientModel(nameClient: nameController.text, cpfCnpjClient: cpfCnpjController.text, bornDate: DateTime.parse(bornDateController.text) , emailClient: emailController.text, addressClient: addressController.text);
+      ClientRepository(virtualDB).insert(clientModel);
+      showDialog(context: context, builder: ((context) {
+        return const AlertDialog(content: Text('Salvo com sucesso'),);
+      }));
+      Navigator.pop(context);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +73,7 @@ class _ClientPageState extends State<ClientPage> {
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       width: width * 0.9,
                       child: TextFormField(
-                          controller: nameController,
+                          controller: cpfCnpjController,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -69,7 +88,7 @@ class _ClientPageState extends State<ClientPage> {
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       width: width * 0.9,
                       child: TextFormField(
-                          controller: nameController,
+                          controller: bornDateController,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -84,7 +103,7 @@ class _ClientPageState extends State<ClientPage> {
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       width: width * 0.9,
                       child: TextFormField(
-                          controller: nameController,
+                          controller: emailController,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
@@ -99,7 +118,7 @@ class _ClientPageState extends State<ClientPage> {
                       margin: const EdgeInsets.symmetric(vertical: 10),
                       width: width * 0.9,
                       child: TextFormField(
-                          controller: nameController,
+                          controller: addressController,
                           keyboardType: TextInputType.text,
                           textCapitalization: TextCapitalization.words,
                           textInputAction: TextInputAction.next,
