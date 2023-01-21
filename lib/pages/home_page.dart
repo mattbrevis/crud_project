@@ -25,8 +25,8 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
         SizedBox(
-            width: 200,
-            height: 45,
+            width: 350,
+            height: 55,
             child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientListPage()));

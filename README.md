@@ -1,5 +1,5 @@
 # crud_project
 
-In this project, you will find some examples of most used types of CRUD.
-
-## Getting Started
+I implemented a repository pattern in this project.
+Only a simple CRUD project without database.
+I created a class called VirtualDB just to register on memory.
