@@ -1,11 +1,9 @@
-
 import 'package:crud_project/model/client_model.dart';
 import 'package:crud_project/repositories/client_interface.dart';
 
 import '../db/virtual_db.dart';
 
-class ClientRepository implements IClientRepository{
-
+class ClientRepository implements IClientRepository {
   final VirtualDB _db;
 
   ClientRepository(this._db);
@@ -16,13 +14,13 @@ class ClientRepository implements IClientRepository{
   }
 
   @override
-  Future<List<ClientModel>> getAll() async {    
+  Future<List<ClientModel>> getAll() async {
     var items = await _db.list();
-    return items.map((item) => ClientModel.fromMap(item)).toList();    
+    return items.map((item) => ClientModel.fromMap(item)).toList();
   }
 
   @override
-  Future<ClientModel?> getOne(int id) async{
+  Future<ClientModel?> getOne(int id) async {
     var item = await _db.findOne(id);
     return item != null ? ClientModel.fromMap(item) : null;
   }
@@ -33,8 +31,7 @@ class ClientRepository implements IClientRepository{
   }
 
   @override
-  Future<void> update(ClientModel client)async {
+  Future<void> update(ClientModel client) async {
     await _db.update(client.toMap());
   }
-  
 }
