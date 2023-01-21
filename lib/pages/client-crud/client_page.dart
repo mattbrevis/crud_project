@@ -19,12 +19,18 @@ class _ClientPageState extends State<ClientPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController cpfController = TextEditingController();
   TextEditingController cnpjController = TextEditingController();
-  TextEditingController bornDateController = TextEditingController(
-      text: UtilData.obterDataDDMMAAAA(DateTime(2000, 01, 01)));
+  TextEditingController bornDateController =
+      TextEditingController(text: '01/01/1999');
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   int i = 0;
   bool isLoading = false;
+  bool isEmailValid(String mail){
+    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(mail);
+  }
+  
   Widget getInputLabel(textLabel) {
     return SizedBox(
         width: 100,
@@ -35,6 +41,7 @@ class _ClientPageState extends State<ClientPage> {
               color: Colors.black,
             )));
   }
+
 
   Widget radioClient() {
     return Row(
@@ -71,7 +78,6 @@ class _ClientPageState extends State<ClientPage> {
     setState(() {
       isLoading = true;
     });
-
     ClientModel clientModel = ClientModel(
         nameClient: nameController.text,
         cpfCnpjClient: i == 0 ? cpfController.text : cnpjController.text,
@@ -120,11 +126,12 @@ class _ClientPageState extends State<ClientPage> {
         body: Container(
             color: Colors.white,
             alignment: Alignment.topCenter,
-            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),            
+            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
             height: height,
             width: width,
             child: SingleChildScrollView(
               child: Form(
+                key: _formKey,
                 child: Container(
                   margin: const EdgeInsets.only(
                       top: 0.0, left: 20.0, right: 20.0, bottom: 0.0),
@@ -149,8 +156,8 @@ class _ClientPageState extends State<ClientPage> {
                                       width: 0.5, color: Colors.grey)),
                             ),
                             validator: ((value) {
-                              if (value == null) {
-                                return 'Required';
+                              if (value == null || value.isEmpty) {
+                                return 'Name is required';
                               }
                               return null;
                             }),
@@ -174,7 +181,16 @@ class _ClientPageState extends State<ClientPage> {
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
-                                ))),
+                                ),
+                                validator: ((value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'CPF is required';
+                                  } else if (CPFValidator.isValid(value) ==
+                                      false) {
+                                    return 'CPF invalid';
+                                  }
+                                  return null;
+                                }))),
                       ),
                       Visibility(
                         visible: i == 1,
@@ -194,9 +210,18 @@ class _ClientPageState extends State<ClientPage> {
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
-                                ))),
+                                ),
+                                validator: ((value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'CNPJ is required';
+                                  } else if (CNPJValidator.isValid(value) ==
+                                      false) {
+                                    return 'CNPJ invalid';
+                                  }
+                                  return null;
+                                }))),
                       ),
-                      SizedBox(                          
+                      SizedBox(
                           width: width * 0.3,
                           child: GestureDetector(
                             child: TextFormField(
@@ -215,7 +240,13 @@ class _ClientPageState extends State<ClientPage> {
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
-                                )),
+                                ),
+                                validator: ((value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Born Date is required';
+                                  }
+                                  return null;
+                                })),
                             onTap: () {
                               showCalendar();
                             },
@@ -224,17 +255,26 @@ class _ClientPageState extends State<ClientPage> {
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           width: width * 0.9,
                           child: TextFormField(
-                              controller: emailController,
-                              keyboardType: TextInputType.emailAddress,
-                              textCapitalization: TextCapitalization.words,
-                              textInputAction: TextInputAction.next,
-                              cursorColor: Colors.black,
-                              decoration: const InputDecoration(
-                                label: Text('E-mail'),
-                                enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 0.5, color: Colors.grey)),
-                              ))),
+                            controller: emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.next,
+                            cursorColor: Colors.black,
+                            decoration: const InputDecoration(
+                              label: Text('E-mail'),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0.5, color: Colors.grey)),
+                            ),
+                            validator: ((value) {
+                              if (value == null || value.isEmpty) {
+                                return 'E-mail is required';
+                              }else if(isEmailValid(value)==false){
+                                return 'E-mail is not valid';
+                              }
+                              return null;
+                            }),
+                          )),
                       Container(
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           width: width * 0.9,
@@ -249,7 +289,13 @@ class _ClientPageState extends State<ClientPage> {
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         width: 0.5, color: Colors.grey)),
-                              ))),
+                              ),
+                              validator: ((value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Address required';
+                                }
+                                return null;
+                              }))),
                     ],
                   ),
                 ),
@@ -265,9 +311,11 @@ class _ClientPageState extends State<ClientPage> {
                   ? const Text('Save')
                   : const CircularProgressIndicator(color: Colors.white),
               onPressed: () async {
-                await addClient().then((value) {
-                  Navigator.pop(context);
-                });
+                if (_formKey.currentState!.validate()) {
+                  await addClient().then((value) {
+                    Navigator.pop(context);
+                  });
+                }
               }),
         ));
   }
