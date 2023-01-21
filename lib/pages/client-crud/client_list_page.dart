@@ -13,21 +13,7 @@ class ClientListPage extends StatefulWidget {
 }
 
 class _ClientListPageState extends State<ClientListPage> {
-  List<ClientModel> listClientModel = [
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
-    ClientModel(addressClient: 'adasd',bornDate: DateTime.parse('1969-07-20 20:18:04Z'), cpfCnpjClient: '51651561561651651',emailClient: 'adsdadad@sdsadsdc.com',nameClient: 'DASDASDASDAS ASD AS DSD SADASD ASD'),
+  List<ClientModel> listClientModel = [    
   ];
   VirtualDB myDataBase = VirtualDB();
   bool isLoading = true;
@@ -36,8 +22,8 @@ class _ClientListPageState extends State<ClientListPage> {
     setState(() {
       isLoading = true;
     });
-    // listClientModel.clear();
-    // listClientModel = await ClientRepository(myDataBase).getAll();
+     listClientModel.clear();
+     listClientModel = await ClientRepository(myDataBase).getAll();
     setState(() {
       isLoading = false;
     });
