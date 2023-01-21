@@ -17,22 +17,25 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SizedBox(        
-        height:  MediaQuery.of(context).size.height,
-        width:  MediaQuery.of(context).size.width,
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,       
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-        SizedBox(
-            width: 350,
-            height: 55,
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientListPage()));
-                },
-                child: const Text('CRUD - Client',
-                    style: TextStyle(color: Colors.white, fontSize: 22)))),
+            SizedBox(
+                width: 350,
+                height: 55,
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ClientListPage()));
+                    },
+                    child: const Text('CRUD - Client',
+                        style: TextStyle(color: Colors.white, fontSize: 22)))),
           ],
         ),
       ),

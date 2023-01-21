@@ -15,22 +15,20 @@ class ClientPage extends StatefulWidget {
 }
 
 class _ClientPageState extends State<ClientPage> {
-  VirtualDB virtualDB = VirtualDB();
-  TextEditingController nameController = TextEditingController();
-  TextEditingController cpfController = TextEditingController();
-  TextEditingController cnpjController = TextEditingController();
-  TextEditingController bornDateController =
-      TextEditingController(text: '01/01/1999');
-  TextEditingController emailController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
+  final virtualDB = VirtualDB();
+  final nameController = TextEditingController();
+  final cpfController = TextEditingController();
+  final cnpjController = TextEditingController();
+  final bornDateController = TextEditingController(text: '01/01/1999');
+  final emailController = TextEditingController();
+  final addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   int i = 0;
   bool isLoading = false;
-  bool isEmailValid(String mail){
-    return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+  bool isEmailValid(String mail) => RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(mail);
-  }
-  
+
   Widget getInputLabel(textLabel) {
     return SizedBox(
         width: 100,
@@ -41,7 +39,6 @@ class _ClientPageState extends State<ClientPage> {
               color: Colors.black,
             )));
   }
-
 
   Widget radioClient() {
     return Row(
@@ -54,6 +51,7 @@ class _ClientPageState extends State<ClientPage> {
             onChanged: (value) {
               setState(() {
                 i = value!;
+                cpfController.text = "";
               });
             },
           ),
@@ -66,6 +64,7 @@ class _ClientPageState extends State<ClientPage> {
             onChanged: (value) {
               setState(() {
                 i = value!;
+                cnpjController.text = "";
               });
             },
           ),
@@ -81,7 +80,7 @@ class _ClientPageState extends State<ClientPage> {
     ClientModel clientModel = ClientModel(
         nameClient: nameController.text,
         cpfCnpjClient: i == 0 ? cpfController.text : cnpjController.text,
-        bornDate: DateTime.parse('1969-07-20 20:18:04Z'),
+        bornDate: DateTime.parse(bornDateController.text),
         emailClient: emailController.text,
         addressClient: addressController.text);
     ClientRepository(virtualDB).insert(clientModel);
@@ -269,7 +268,7 @@ class _ClientPageState extends State<ClientPage> {
                             validator: ((value) {
                               if (value == null || value.isEmpty) {
                                 return 'E-mail is required';
-                              }else if(isEmailValid(value)==false){
+                              } else if (isEmailValid(value) == false) {
                                 return 'E-mail is not valid';
                               }
                               return null;
