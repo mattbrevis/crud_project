@@ -15,7 +15,6 @@ class ClientListPage extends StatefulWidget {
 
 class _ClientListPageState extends State<ClientListPage> {
   List<ClientModel> listClientModel = [];
-  VirtualDB myDataBase = VirtualDB();
   bool isLoading = true;
 
   void addDataListClient() async {
@@ -23,7 +22,7 @@ class _ClientListPageState extends State<ClientListPage> {
       isLoading = true;
     });
     listClientModel.clear();
-    listClientModel = await ClientRepository(myDataBase).getAll();
+    listClientModel = await ClientRepository(VirtualDB()).getAll();
     setState(() {
       isLoading = false;
     });
@@ -87,13 +86,16 @@ class _ClientListPageState extends State<ClientListPage> {
                                           alignment: Alignment.center,
                                           child: Row(children: [
                                             IconButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+
+
+                                                },
                                                 icon: const Icon(Icons.edit)),
                                             IconButton(
-                                                onPressed: () {
-                                                  ClientRepository(myDataBase)
-                                                      .delete(index);
-                                                  setState(() {});
+                                                onPressed: () async {
+
+                                                  await ClientRepository(VirtualDB()).delete(listClientModel[index].id);
+                                                  addDataListClient();                                                  
                                                 },
                                                 icon: const Icon(Icons.delete,
                                                     color: Colors.red))

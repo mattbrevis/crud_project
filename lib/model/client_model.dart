@@ -2,13 +2,14 @@ import 'dart:convert';
 
 class ClientModel {
   ClientModel({
+    required this.id,
     required this.nameClient,
     required this.cpfCnpjClient,
     required this.bornDate,
     required this.emailClient,
     required this.addressClient,
   });
-  
+  int id;
   String nameClient;
   String cpfCnpjClient;
   DateTime bornDate;
@@ -20,6 +21,7 @@ class ClientModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'nameClient': nameClient,
       'cpfCnpjClient': cpfCnpjClient,
       'bornDate': bornDate,
@@ -30,6 +32,7 @@ class ClientModel {
 
   factory ClientModel.fromMap(Map<String, dynamic> map) {
     return ClientModel(
+      id: map['id'] as int,
       nameClient: map['nameClient'] as String,
       cpfCnpjClient: map['cpfCnpjClient'] as String,
       bornDate: map['bornDate'],

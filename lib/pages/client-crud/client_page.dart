@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:crud_project/db/virtual_db.dart';
@@ -15,7 +17,6 @@ class ClientPage extends StatefulWidget {
 }
 
 class _ClientPageState extends State<ClientPage> {
-  final virtualDB = VirtualDB();
   final nameController = TextEditingController();
   final cpfController = TextEditingController();
   final cnpjController = TextEditingController();
@@ -73,17 +74,21 @@ class _ClientPageState extends State<ClientPage> {
     );
   }
 
-  Future<void> addClient() async {
-    setState(() {
-      isLoading = true;
-    });
-    ClientModel clientModel = ClientModel(
-        nameClient: nameController.text,
-        cpfCnpjClient: i == 0 ? cpfController.text : cnpjController.text,
-        bornDate: DateTime.parse(bornDateController.text),
-        emailClient: emailController.text,
-        addressClient: addressController.text);
-    ClientRepository(virtualDB).insert(clientModel);
+  Future<bool> addClient() async {
+    final idClient =Random().nextInt(1000);
+    try {
+      ClientModel clientModel = ClientModel(
+          id: idClient,
+          nameClient: nameController.text,
+          cpfCnpjClient: i == 0 ? cpfController.text : cnpjController.text,
+          bornDate: UtilData.obterDateTime(bornDateController.text),
+          emailClient: emailController.text,
+          addressClient: addressController.text);
+      await ClientRepository(VirtualDB()).insert(clientModel);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   void showCalendar() {
@@ -306,16 +311,27 @@ class _ClientPageState extends State<ClientPage> {
           height: 70,
           width: width * 0.85,
           child: ElevatedButton(
-              child: isLoading == false
-                  ? const Text('Save')
-                  : const CircularProgressIndicator(color: Colors.white),
-              onPressed: () async {
+              onPressed: isLoading == true ? null : () async {
                 if (_formKey.currentState!.validate()) {
-                  await addClient().then((value) {
-                    Navigator.pop(context);
+                  setState(() {
+                    isLoading = true;
+                  });
+                  await addClient().then((value) async {
+                    if (value == true) {
+                      Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Unexpected error')));
+                      setState(() {
+                        isLoading = false;
+                      });
+                    }
                   });
                 }
-              }),
+              },
+              child: isLoading == false
+                  ? const Text('Save')
+                  : const CircularProgressIndicator(color: Colors.white)),
         ));
   }
 }

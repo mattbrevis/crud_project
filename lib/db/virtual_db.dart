@@ -1,22 +1,19 @@
 
-import 'dart:math';
-
 class VirtualDB {
   final List<Map<String, dynamic>> _items = [];
-  static final VirtualDB _db = VirtualDB._privateConstructor();
+  static final VirtualDB _db = VirtualDB._();
 
-  VirtualDB._privateConstructor();
+  VirtualDB._();
 
   factory VirtualDB() {
     return _db;
   }
 
-  Future<void> insert(Map<String, dynamic> item) async {
-    item['id'] = Random().nextInt(1000);
+  Future<void> insert(Map<String, dynamic> item) async {    
     _items.add(item);
   }
 
-  Future<void> remove(int id) async {
+  Future<void> remove(int id) async {    
     _items.removeWhere((item) => item['id'] == id);
   }
 
