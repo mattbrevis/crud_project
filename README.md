@@ -1,8 +1,9 @@
 # crud_project
 
-I implemented a repository pattern in this project.
-Only a simple CRUD project without any database connection.
-At the moment, the project only have a Client CRUD example, but in the future I intend to
-create more examples like Products, Photos, and etc.
-I created a class called VirtualDB just to register on memory.
+This is a CRUD project without database connection.
+I created a class called VirtualDB to register on memory while the app is running, 
+I've implemented repository pattern in this project. 
+At the moment, the project have one example of Client CRUD example, but in the future I intend to
+create more examples like products, photos, and etc.
+
 
