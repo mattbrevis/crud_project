@@ -104,12 +104,7 @@ class _ClientPageState extends State<ClientPage> {
   }
 
   Future<bool> addClient() async {
-    
-    
-    int idClient =Random().nextInt(1000);
-    if(widget.clientModel==null){
-      idClient=widget.clientModel!.id;
-    }
+    final idClient =widget.clientModel==null? Random().nextInt(1000): widget.clientModel!.id;
     final String cpfCnpjClient = isPessoaJuridica == 0 ? cpfController.text : cnpjController.text;
     
     try {
@@ -121,11 +116,11 @@ class _ClientPageState extends State<ClientPage> {
           emailClient: emailController.text,
           addressClient: addressController.text);
       if(widget.clientModel==null){
-        await ClientRepository(VirtualDB()).insert(clientModel);        
+        await ClientRepository(VirtualDB()).insert(clientModel);
       }else{
         await ClientRepository(VirtualDB()).update(clientModel);
       }
-        return true;
+      return true;
     } catch (e) {
       return false;
     }
@@ -377,7 +372,7 @@ class _ClientPageState extends State<ClientPage> {
                 }
               },
               child: isLoading == false
-                  ? Text(widget.clientModel!=null ?'Save': 'Edit')
+                  ? Text(widget.clientModel==null?'Save': 'Edit')
                   : const CircularProgressIndicator(color: Colors.white)),
         ));
   }

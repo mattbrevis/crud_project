@@ -83,17 +83,18 @@ class _ClientListPageState extends State<ClientListPage> {
                                           alignment: Alignment.center,
                                           child: Row(children: [
                                             IconButton(
-                                                onPressed: () {
-                                                  Navigator.push(
+                                                onPressed: ()  async{
+                                                  await Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               ClientPage(clientModel: listClientModel[index],)));
+                                                              addDataListClient();
                                                 },
                                                 icon: const Icon(Icons.edit)),
                                             IconButton(
-                                                onPressed: () async {
-                                                  await ClientRepository(
+                                                onPressed: ()  {
+                                                   ClientRepository(
                                                           VirtualDB())
                                                       .delete(
                                                           listClientModel[index]
