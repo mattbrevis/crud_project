@@ -1,16 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:crud_project/db/virtual_db.dart';
-import 'package:crud_project/model/client_model.dart';
-import 'package:crud_project/repositories/client_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:crud_project/db/virtual_db.dart';
+import 'package:crud_project/model/client_model.dart';
+import 'package:crud_project/repositories/client_repository.dart';
+
 class ClientPage extends StatefulWidget {
-  const ClientPage({super.key});
+  final ClientModel? clientModel;
+  const ClientPage({
+    Key? key,
+    this.clientModel,
+  }) : super(key: key);
 
   @override
   State<ClientPage> createState() => _ClientPageState();
@@ -24,7 +30,7 @@ class _ClientPageState extends State<ClientPage> {
   final emailController = TextEditingController();
   final addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  int i = 0;
+  int isPessoaJuridica = 0;
   bool isLoading = false;
   bool isEmailValid(String mail) => RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -48,10 +54,10 @@ class _ClientPageState extends State<ClientPage> {
           child: RadioListTile(
             title: const Text('P. Física'),
             value: 0,
-            groupValue: i,
+            groupValue: isPessoaJuridica,
             onChanged: (value) {
               setState(() {
-                i = value!;
+                isPessoaJuridica = value!;
                 cpfController.text = "";
               });
             },
@@ -61,10 +67,10 @@ class _ClientPageState extends State<ClientPage> {
           child: RadioListTile(
             title: const Text('P. Jurídica'),
             value: 1,
-            groupValue: i,
+            groupValue: isPessoaJuridica,
             onChanged: (value) {
               setState(() {
-                i = value!;
+                isPessoaJuridica = value!;
                 cnpjController.text = "";
               });
             },
@@ -73,14 +79,39 @@ class _ClientPageState extends State<ClientPage> {
       ],
     );
   }
+  getClient(){
+    try {
+    if (widget.clientModel!=null){
+        nameController.text= widget.clientModel!.nameClient.toString();        
+        addressController.text =widget.clientModel!.addressClient.toString();
+        bornDateController.text = UtilData.obterDataDDMMAAAA(widget.clientModel!.bornDate);
+        emailController.text =  widget.clientModel!.emailClient.toString();        
+        if(widget.clientModel!.cpfCnpjClient.length==14){
+        cpfController.text = widget.clientModel!.cpfCnpjClient.toString(); 
+        isPessoaJuridica=0;    
+        }else{
+        cnpjController.text = widget.clientModel!.cpfCnpjClient.toString();
+        isPessoaJuridica=1;    
+        }            
+        
+    }  
+    } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+                           SnackBar(content: Text('Unexpected error ${e.toString()}')));      
+    }
+    
+
+  }
 
   Future<bool> addClient() async {
     final idClient =Random().nextInt(1000);
+    final String cpfCnpjClient = isPessoaJuridica == 0 ? cpfController.text : cnpjController.text;
+    
     try {
       ClientModel clientModel = ClientModel(
           id: idClient,
           nameClient: nameController.text,
-          cpfCnpjClient: i == 0 ? cpfController.text : cnpjController.text,
+          cpfCnpjClient: cpfCnpjClient,
           bornDate: UtilData.obterDateTime(bornDateController.text),
           emailClient: emailController.text,
           addressClient: addressController.text);
@@ -117,6 +148,13 @@ class _ClientPageState extends State<ClientPage> {
       maxDateTime: DateTime(2000, 1, 1),
       initialDateTime: DateTime(1999, 1, 1),
     ).show(context);
+  }
+  @override
+  void initState() {
+    if(widget.clientModel!=null){
+      getClient();
+    }
+    super.initState();
   }
 
   @override
@@ -167,7 +205,7 @@ class _ClientPageState extends State<ClientPage> {
                             }),
                           )),
                       Visibility(
-                        visible: i == 0,
+                        visible: isPessoaJuridica == 0,
                         child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             width: width * 0.9,
@@ -197,7 +235,7 @@ class _ClientPageState extends State<ClientPage> {
                                 }))),
                       ),
                       Visibility(
-                        visible: i == 1,
+                        visible: isPessoaJuridica == 1,
                         child: Container(
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             width: width * 0.9,

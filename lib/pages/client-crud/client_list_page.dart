@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:crud_project/db/virtual_db.dart';
 import 'package:crud_project/repositories/client_repository.dart';
 import 'package:intl/intl.dart';
-
 import '../../model/client_model.dart';
 import 'client_page.dart';
 
@@ -27,8 +25,6 @@ class _ClientListPageState extends State<ClientListPage> {
       isLoading = false;
     });
   }
-
-  void editClient() {}
 
   @override
   void initState() {
@@ -61,6 +57,7 @@ class _ClientListPageState extends State<ClientListPage> {
                                 String bornDateMask = formatter
                                     .format(listClientModel[index].bornDate)
                                     .toString();
+
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 20.0),
@@ -87,15 +84,21 @@ class _ClientListPageState extends State<ClientListPage> {
                                           child: Row(children: [
                                             IconButton(
                                                 onPressed: () {
-
-
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ClientPage(clientModel: listClientModel[index],)));
                                                 },
                                                 icon: const Icon(Icons.edit)),
                                             IconButton(
                                                 onPressed: () async {
-
-                                                  await ClientRepository(VirtualDB()).delete(listClientModel[index].id);
-                                                  addDataListClient();                                                  
+                                                  await ClientRepository(
+                                                          VirtualDB())
+                                                      .delete(
+                                                          listClientModel[index]
+                                                              .id);
+                                                  addDataListClient();
                                                 },
                                                 icon: const Icon(Icons.delete,
                                                     color: Colors.red))
