@@ -1,6 +1,6 @@
 # crud_project
 
-<p>This is a CRUD project without a database connection. </p>
+<h1>This is a CRUD project without a database connection. </h1>
 
 Where I created a class called 'VirtualDB' to save the register on memory.
 I have implemented a repository pattern too. 
@@ -8,3 +8,7 @@ Currently, the project has one CRUD client as an example.
 In this project, I use the package called 'brasil_fields', that helps me with some masks input, validation with CPF/CNPJ(document id for brazilians).  
 However, in the future, I may create more examples, such as; products, photos, and others
 
+<img align="center" height="200" width="100" src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
+<img align="center" height="200" width="100" src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true">              
+<img align="center" height="200" width="100" src="https://github.com/mattbrevis/crud_project/blob/main/images/3.jpeg?raw=true">
+<img align="center" height="200" width="100" src="https://github.com/mattbrevis/crud_project/blob/main/images/4.jpeg?raw=true">          
