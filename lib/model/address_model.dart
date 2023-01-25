@@ -16,9 +16,9 @@ class AddressClientModel {
 
   AddressClientModel.fromJson(Map<String, dynamic> json) {
     cep = json['cep'];
-    city = json['logradouro'];
+    city = json['localidade'];
     district = json['bairro'];
-    address = json['localidade'];
+    address = json['logradouro'];
     uf = json['uf'];
   }
   

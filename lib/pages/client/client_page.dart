@@ -28,7 +28,7 @@ class _ClientPageState extends State<ClientPage> {
   final nameController = TextEditingController();
   final cpfController = TextEditingController();
   final cnpjController = TextEditingController();
-  final bornDateController = TextEditingController();
+  final bornDateController = TextEditingController(text: '01/01/1990');
   final emailController = TextEditingController();
   final cepController = TextEditingController();
   final ufController = TextEditingController();
@@ -43,6 +43,13 @@ class _ClientPageState extends State<ClientPage> {
   bool isEmailValid(String mail) => RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(mail);
+  clearAddress() {
+    ufController.text = '';
+    cityController.text = '';
+    phoneController.text = '';
+    addressController.text = '';
+    districtController.text = '';
+  }
 
   Widget getInputLabel(textLabel) {
     return SizedBox(
@@ -222,11 +229,13 @@ class _ClientPageState extends State<ClientPage> {
                             textCapitalization: TextCapitalization.words,
                             textInputAction: TextInputAction.next,
                             cursorColor: Colors.black,
-                            decoration:  InputDecoration(
+                            decoration: InputDecoration(
                               floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
-                              label: const Text('Name'),                              
-                              hintText: isPessoaJuridica==0 ? 'Your Name Here' :'Your Company Name',
+                                  FloatingLabelBehavior.always,
+                              label: const Text('Name'),
+                              hintText: isPessoaJuridica == 0
+                                  ? 'Your Name Here'
+                                  : 'Your Company Name',
                               enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 0.5, color: Colors.grey)),
@@ -253,7 +262,7 @@ class _ClientPageState extends State<ClientPage> {
                                 ],
                                 decoration: const InputDecoration(
                                   floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                      FloatingLabelBehavior.always,
                                   label: Text('CPF'),
                                   hintText: '999.999.999-99',
                                   enabledBorder: OutlineInputBorder(
@@ -287,7 +296,7 @@ class _ClientPageState extends State<ClientPage> {
                                   label: Text('CNPJ'),
                                   hintText: '88.888.8888-88',
                                   floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                      FloatingLabelBehavior.always,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
@@ -318,7 +327,7 @@ class _ClientPageState extends State<ClientPage> {
                                 cursorColor: Colors.black,
                                 decoration: const InputDecoration(
                                   floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                      FloatingLabelBehavior.always,
                                   label: Text('Born Date'),
                                   hintText: '01/01/1990',
                                   enabledBorder: OutlineInputBorder(
@@ -326,7 +335,7 @@ class _ClientPageState extends State<ClientPage> {
                                           width: 0.5, color: Colors.grey)),
                                 ),
                                 validator: ((value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null || value.isEmpty )  {
                                     return 'Born Date is required';
                                   }
                                   return null;
@@ -346,7 +355,7 @@ class _ClientPageState extends State<ClientPage> {
                             cursorColor: Colors.black,
                             decoration: const InputDecoration(
                               floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                  FloatingLabelBehavior.always,
                               label: Text('E-mail'),
                               hintText: 'email@example.com',
                               enabledBorder: OutlineInputBorder(
@@ -377,7 +386,7 @@ class _ClientPageState extends State<ClientPage> {
                             ],
                             decoration: const InputDecoration(
                               floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                  FloatingLabelBehavior.always,
                               label: Text('Phone'),
                               hintText: '(99) 99999-9999',
                               enabledBorder: OutlineInputBorder(
@@ -416,8 +425,12 @@ class _ClientPageState extends State<ClientPage> {
                                           borderSide: BorderSide(
                                               width: 0.5, color: Colors.grey)),
                                     ),
+                                    onChanged: (value) {
+                                      clearAddress();
+                                    },
                                     validator: ((value) {
                                       if (value == null || value.isEmpty) {
+                                        clearAddress();
                                         return 'Zip Code is required';
                                       }
                                       return null;
@@ -429,7 +442,7 @@ class _ClientPageState extends State<ClientPage> {
                               SizedBox(
                                 width: width * 0.4,
                                 height: 50,
-                                child: ElevatedButton(
+                                child: ElevatedButton(                                    
                                     onPressed: () async {
                                       await ICepRepository.instance
                                           .getAddress(
@@ -438,13 +451,12 @@ class _ClientPageState extends State<ClientPage> {
                                           .then((value) {
                                         setState(() {
                                           addressController.text =
-                                              value.address.toString();
+                                              value.address ?? '';
                                           districtController.text =
-                                              value.district.toString();
+                                              value.district ?? '';
                                           cityController.text =
-                                              value.city.toString();
-                                          ufController.text =
-                                              value.uf.toString();
+                                              value.city ?? '';
+                                          ufController.text = value.uf ?? '';
                                         });
                                       });
                                     },
@@ -464,7 +476,7 @@ class _ClientPageState extends State<ClientPage> {
                               const SizedBox(
                                 width: 10,
                               ),
-                              Expanded(                                
+                              Expanded(
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
                                   controller: ufController,
@@ -472,8 +484,8 @@ class _ClientPageState extends State<ClientPage> {
                                   cursorColor: Colors.black,
                                   decoration: const InputDecoration(
                                     floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
-                                    hintText: 'UF',                                    
+                                        FloatingLabelBehavior.always,
+                                    hintText: 'UF',
                                     enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             width: 0.5, color: Colors.grey)),
@@ -493,7 +505,7 @@ class _ClientPageState extends State<ClientPage> {
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
                                 floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                    FloatingLabelBehavior.always,
                                 label: Text('Address'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -516,7 +528,7 @@ class _ClientPageState extends State<ClientPage> {
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
                                 floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                    FloatingLabelBehavior.always,
                                 label: Text('District'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -539,7 +551,7 @@ class _ClientPageState extends State<ClientPage> {
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
                                 floatingLabelBehavior:
-                                          FloatingLabelBehavior.always,
+                                    FloatingLabelBehavior.always,
                                 label: Text('City'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -550,7 +562,7 @@ class _ClientPageState extends State<ClientPage> {
                                   return 'City required';
                                 }
                                 return null;
-                              }))),                      
+                              }))),
                     ],
                   ),
                 ),

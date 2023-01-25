@@ -57,7 +57,8 @@ class _ClientListPageState extends State<ClientListPage> {
                                 String bornDateMask = formatter
                                     .format(listClientModel[index].bornDate)
                                     .toString();
-
+                                String title = listClientModel[index].nameClient.toString();
+                                 
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 20.0),

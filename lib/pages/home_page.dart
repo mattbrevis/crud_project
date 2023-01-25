@@ -1,4 +1,4 @@
-import 'package:crud_project/pages/client-crud/client_list_page.dart';
+import 'package:crud_project/pages/client/client_list_page.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
