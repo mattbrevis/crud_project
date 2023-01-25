@@ -57,8 +57,22 @@ class _ClientListPageState extends State<ClientListPage> {
                                 String bornDateMask = formatter
                                     .format(listClientModel[index].bornDate)
                                     .toString();
-                                String title = listClientModel[index].nameClient.toString();
-                                 
+                                String title = '';
+                                String subtitle = '';
+                                String dataClientComplete =
+                                    'City: ${listClientModel[index].address!.city.toString()}\nUF: ${listClientModel[index].address!.uf.toString()}\nDistrict: ${listClientModel[index].address!.district.toString()}\nZip-Code: ${listClientModel[index].address!.cep.toString()}  \nBorn Date: $bornDateMask \nE-mail: ${listClientModel[index].emailClient.toString()}';
+                                if (listClientModel[index].nameClient.length ==
+                                    14) {
+                                  title =
+                                      'Name: ${listClientModel[index].nameClient}';
+                                  subtitle =
+                                      'CPF: ${listClientModel[index].nameClient}\n$dataClientComplete';
+                                } else {
+                                  title =
+                                      'Company: ${listClientModel[index].nameClient}';
+                                  subtitle =
+                                      'CNPJ: ${listClientModel[index].nameClient}\n$dataClientComplete';
+                                }
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 20.0),
@@ -72,11 +86,10 @@ class _ClientListPageState extends State<ClientListPage> {
                                       alignment: Alignment.center,
                                       child: ListTile(
                                         title: Text(
-                                          'NAME/COMPANY: ${listClientModel[index].nameClient.toUpperCase()}',
+                                          title.toUpperCase(),
                                           textAlign: TextAlign.center,
                                         ),
-                                        subtitle: Text(
-                                            'CPF/CNPJ: ${listClientModel[index].cpfCnpjClient.toString()} \nBorn Date: $bornDateMask \nE-mail: ${listClientModel[index].emailClient.toString()}',
+                                        subtitle: Text(subtitle,
                                             textAlign: TextAlign.center),
                                         trailing: Container(
                                           width: 100,
@@ -84,19 +97,22 @@ class _ClientListPageState extends State<ClientListPage> {
                                           alignment: Alignment.center,
                                           child: Row(children: [
                                             IconButton(
-                                                onPressed: ()  async{
+                                                onPressed: () async {
                                                   await Navigator.push(
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ClientPage(clientModel: listClientModel[index],)));
-                                                              addDataListClient();
+                                                              ClientPage(
+                                                                clientModel:
+                                                                    listClientModel[
+                                                                        index],
+                                                              )));
+                                                  addDataListClient();
                                                 },
                                                 icon: const Icon(Icons.edit)),
                                             IconButton(
-                                                onPressed: ()  {
-                                                   ClientRepository(
-                                                          VirtualDB())
+                                                onPressed: () {
+                                                  ClientRepository(VirtualDB())
                                                       .delete(
                                                           listClientModel[index]
                                                               .id);
