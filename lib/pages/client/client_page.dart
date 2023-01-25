@@ -39,6 +39,7 @@ class _ClientPageState extends State<ClientPage> {
   final _formKey = GlobalKey<FormState>();
   int isPessoaJuridica = 0;
   bool isLoading = false;
+  bool isLoadingAddress = false;
 
   bool isEmailValid(String mail) => RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -444,7 +445,10 @@ class _ClientPageState extends State<ClientPage> {
                                 width: width * 0.4,
                                 height: 50,
                                 child: ElevatedButton(                                    
-                                    onPressed: () async {
+                                    onPressed: isLoadingAddress ==true? null :() async {
+                                      setState(() {
+                                        isLoadingAddress = true;
+                                      });
                                       await ICepRepository.instance
                                           .getAddress(
                                               UtilBrasilFields.removeCaracteres(
@@ -458,19 +462,20 @@ class _ClientPageState extends State<ClientPage> {
                                           cityController.text =
                                               value.city ?? '';
                                           ufController.text = value.uf ?? '';
+                                          isLoadingAddress = false;
                                         });
                                       });
                                     },
                                     child: Row(
-                                      children: const [
-                                        SizedBox(
+                                      children:  [
+                                        const SizedBox(
                                           width: 15,
                                         ),
-                                        Text(
+                                        isLoadingAddress == true? const Center(child: CircularProgressIndicator()): const Text(
                                           'Zip Code',
                                           style: TextStyle(fontSize: 18),
                                         ),
-                                        Expanded(child: Icon(Icons.search)),
+                                        const Expanded(child: Icon(Icons.search)),
                                       ],
                                     )),
                               ),

@@ -18,6 +18,7 @@ class _MyHomePageState extends State<MyHomePage> {
         color: Colors.indigo,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:crud_project/db/virtual_db.dart';
 import 'package:crud_project/repositories/client_repository.dart';
-import 'package:intl/intl.dart';
 import '../../model/client_model.dart';
 import 'client_page.dart';
 
@@ -34,8 +33,6 @@ class _ClientListPageState extends State<ClientListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final formatter = DateFormat('dd-MM-yyyy');
-
     return Scaffold(
       appBar: AppBar(title: const Text('Client List')),
       body: isLoading == false
@@ -55,48 +52,52 @@ class _ClientListPageState extends State<ClientListPage> {
                               itemCount: listClientModel.length,
                               itemBuilder: ((context, index) {
                                 final clientModel = listClientModel[index];
-                                String bornDateMask = formatter
-                                    .format(listClientModel[index].bornDate)
-                                    .toString();
                                 String title = '';
                                 String subtitle = '';
                                 String dataClientComplete =
-                                    'City: ${clientModel.address?.city.toString()} UF: ${clientModel.address?.uf.toString()}\nDistrict: ${clientModel.address?.district.toString()}\nAddress: ${clientModel.address?.address.toString()} \nZip-Code: ${clientModel.address?.cep.toString()}  \nBorn Date: $bornDateMask \nE-mail: ${clientModel.emailClient.toString()}';
-                                if (clientModel.nameClient.length <
-                                    14) {
-                                  title =
-                                      'Name: ${clientModel.nameClient}';
+                                    'City: ${clientModel.address?.city.toString()} UF: ${clientModel.address?.uf.toString()}\nDistrict: ${clientModel.address?.district.toString()}\nAddress: ${clientModel.address?.address.toString()} \nE-mail: ${clientModel.emailClient.toString()}';
+                                if (clientModel.nameClient.length < 14) {
+                                  title = 'Name: ${clientModel.nameClient}';
                                   subtitle =
                                       'CPF: ${clientModel.cpfCnpjClient}\n$dataClientComplete';
                                 } else {
-                                  title =
-                                      'Company: ${clientModel.nameClient}';
+                                  title = 'Company: ${clientModel.nameClient}';
                                   subtitle =
                                       'CNPJ: ${clientModel.cpfCnpjClient}\n$dataClientComplete';
                                 }
-                                return Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 20.0),
-                                  width: MediaQuery.of(context).size.width * .8,
-                                  height: 200,
-                                  child: Card(
-                                    elevation: 2,
-                                    child: Container(
-                                      height: 120,
-                                      width: 120,
-                                      alignment: Alignment.center,                                      
-                                      child: ListTile(
-                                        title: Text(
-                                          title.toUpperCase(),                                        
+                                return Card(
+                                  margin:const EdgeInsets.all(15.0) ,
+                                  elevation: 3,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: const EdgeInsets.all(10),
+                                    width:
+                                        MediaQuery.of(context).size.width * .9,
+                                    height: 120,
+                                    child: Row(children: [
+                                      const SizedBox(
+                                        child: Center( 
+                                          child: Icon(Icons.person,),
                                         ),
-                                        subtitle: Text(subtitle,
-                                           ),
-                                        trailing: Container(
-                                          width: 100,
-                                          height: 120,
-                                          alignment: Alignment.center,
-                                          child: Row(children: [
-                                            IconButton(
+                                      ),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              .6,
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                title,                                               
+                                              ),
+                                              Expanded(child: Text(subtitle)),
+                                            ],
+                                          )),
+                                      SizedBox(
+                                        width: MediaQuery.of(context).size.width * .2,                                                                                
+                                        child: Row(children: [
+                                          Expanded(
+                                            child: IconButton(
                                                 onPressed: () async {
                                                   await Navigator.push(
                                                       context,
@@ -110,7 +111,9 @@ class _ClientListPageState extends State<ClientListPage> {
                                                   addDataListClient();
                                                 },
                                                 icon: const Icon(Icons.edit)),
-                                            IconButton(
+                                          ),
+                                          Expanded(
+                                            child: IconButton(
                                                 onPressed: () {
                                                   ClientRepository(VirtualDB())
                                                       .delete(
@@ -119,11 +122,11 @@ class _ClientListPageState extends State<ClientListPage> {
                                                   addDataListClient();
                                                 },
                                                 icon: const Icon(Icons.delete,
-                                                    color: Colors.red))
-                                          ]),
-                                        ),
+                                                    color: Colors.red)),
+                                          )
+                                        ]),
                                       ),
-                                    ),
+                                    ]),
                                   ),
                                 );
                               }))),
