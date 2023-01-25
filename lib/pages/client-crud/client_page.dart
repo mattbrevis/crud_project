@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:crud_project/model/address_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,10 +29,16 @@ class _ClientPageState extends State<ClientPage> {
   final cnpjController = TextEditingController();
   final bornDateController = TextEditingController(text: '01/01/1999');
   final emailController = TextEditingController();
+  final cepController = TextEditingController();
+  final ufController = TextEditingController();
+  final districtController = TextEditingController();
+  final cityController = TextEditingController();
+  final phoneController = TextEditingController();
   final addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   int isPessoaJuridica = 0;
   bool isLoading = false;
+
   bool isEmailValid(String mail) => RegExp(
           r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(mail);
@@ -79,45 +86,61 @@ class _ClientPageState extends State<ClientPage> {
       ],
     );
   }
-  getClient(){
-    try {
-    if (widget.clientModel!=null){
-        nameController.text= widget.clientModel!.nameClient.toString();        
-        addressController.text =widget.clientModel!.addressClient.toString();
-        bornDateController.text = UtilData.obterDataDDMMAAAA(widget.clientModel!.bornDate);
-        emailController.text =  widget.clientModel!.emailClient.toString();        
-        if(widget.clientModel!.cpfCnpjClient.length==14){
-        cpfController.text = widget.clientModel!.cpfCnpjClient.toString(); 
-        isPessoaJuridica=0;    
-        }else{
-        cnpjController.text = widget.clientModel!.cpfCnpjClient.toString();
-        isPessoaJuridica=1;    
-        }            
-        
-    }  
-    } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-                           SnackBar(content: Text('Unexpected error ${e.toString()}')));      
-    }
-    
 
+  getClient() {
+    try {
+      if (widget.clientModel != null) {
+        nameController.text = widget.clientModel!.nameClient.toString();
+        bornDateController.text =
+            UtilData.obterDataDDMMAAAA(widget.clientModel!.bornDate);
+        emailController.text = widget.clientModel!.emailClient.toString();
+        phoneController.text = widget.clientModel!.phone;
+        if (widget.clientModel!.cpfCnpjClient.length == 14) {
+          cpfController.text = widget.clientModel!.cpfCnpjClient.toString();
+          isPessoaJuridica = 0;
+        } else {
+          cnpjController.text = widget.clientModel!.cpfCnpjClient.toString();
+          isPessoaJuridica = 1;
+        }
+      }
+      if (widget.clientModel!.address != null) {
+        cepController.text = widget.clientModel!.address!.cep.toString();
+        ufController.text = widget.clientModel!.address!.uf.toString();
+        districtController.text = widget.clientModel!.address!.district.toString();
+        cityController.text = widget.clientModel!.address!.city.toString();        
+        addressController.text = widget.clientModel!.address!.address.toString();
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unexpected error ${e.toString()}')));
+    }
   }
 
   Future<bool> addClient() async {
-    final idClient =widget.clientModel==null? Random().nextInt(1000): widget.clientModel!.id;
-    final String cpfCnpjClient = isPessoaJuridica == 0 ? cpfController.text : cnpjController.text;
-    
+    final idClient = widget.clientModel == null
+        ? Random().nextInt(1000)
+        : widget.clientModel!.id;
+    final String cpfCnpjClient =
+        isPessoaJuridica == 0 ? cpfController.text : cnpjController.text;
+
     try {
-      ClientModel clientModel = ClientModel(
+      final addressClient = AddressModel(
+          cep: cepController.text,
+          uf: ufController.text,
+          district: districtController.text,
+          city: cityController.text);
+
+      final clientModel = ClientModel(
           id: idClient,
           nameClient: nameController.text,
           cpfCnpjClient: cpfCnpjClient,
           bornDate: UtilData.obterDateTime(bornDateController.text),
           emailClient: emailController.text,
-          addressClient: addressController.text);
-      if(widget.clientModel==null){
+          phone: phoneController.text,
+          address: addressClient);
+      if (widget.clientModel == null) {
         await ClientRepository(VirtualDB()).insert(clientModel);
-      }else{
+      } else {
         await ClientRepository(VirtualDB()).update(clientModel);
       }
       return true;
@@ -153,9 +176,10 @@ class _ClientPageState extends State<ClientPage> {
       initialDateTime: DateTime(1999, 1, 1),
     ).show(context);
   }
+
   @override
   void initState() {
-    if(widget.clientModel!=null){
+    if (widget.clientModel != null) {
       getClient();
     }
     super.initState();
@@ -172,7 +196,7 @@ class _ClientPageState extends State<ClientPage> {
         body: Container(
             color: Colors.white,
             alignment: Alignment.topCenter,
-            padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             height: height,
             width: width,
             child: SingleChildScrollView(
@@ -325,7 +349,105 @@ class _ClientPageState extends State<ClientPage> {
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           width: width * 0.9,
                           child: TextFormField(
-                              controller: addressController,
+                            controller: phoneController,
+                            keyboardType: TextInputType.phone,
+                            textCapitalization: TextCapitalization.words,
+                            textInputAction: TextInputAction.next,
+                            cursorColor: Colors.black,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              TelefoneInputFormatter()
+                            ],
+                            decoration: const InputDecoration(
+                              
+                              label: Text('Phone'),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      width: 0.5, color: Colors.grey)),
+                            ),
+                            validator: ((value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Phone is required';
+                              } 
+                              return null;
+                            }),
+                          )),
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          width: width * 0.9,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                child: TextFormField(
+                                    controller: cepController,
+                                    cursorColor: Colors.black,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      FilteringTextInputFormatter.digitsOnly,
+                                      CepInputFormatter()
+                                    ],
+                                    decoration: const InputDecoration(
+                                      label: Text('CEP'),
+                                      hintText: '00.000-000',
+                                      enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              width: 0.5, color: Colors.grey)),
+                                    ),
+                                    validator: ((value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'CEP is required';
+                                      }
+
+                                      return null;
+                                    })),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: width * 0.4,
+                                height: 50,
+                                child: ElevatedButton(                                    
+                                    onPressed: () {},
+                                    child: Row(
+                                      children: const[
+                                        Icon(Icons.search),
+                                        SizedBox(width: 15,),
+                                        Text('Check CEP',style: TextStyle(fontSize: 18),),
+                                      ],
+                                    )),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                width: 60,
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  controller: ufController,
+                                  enabled: false,
+                                  cursorColor: Colors.black,
+                                  decoration: const InputDecoration(
+                                    label: Text(
+                                      'UF',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    contentPadding: EdgeInsets.fromLTRB(
+                                        20.0, 10.0, 20.0, 10.0),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            width: 0.5, color: Colors.grey)),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          width: width * 0.9,
+                          child: TextFormField(
+                              controller: cityController,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.next,
@@ -342,6 +464,70 @@ class _ClientPageState extends State<ClientPage> {
                                 }
                                 return null;
                               }))),
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          width: width * 0.9,
+                          child: TextFormField(
+                              controller: districtController,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
+                              cursorColor: Colors.black,
+                              decoration: const InputDecoration(
+                                label: Text('District'),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0.5, color: Colors.grey)),
+                              ),
+                              validator: ((value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'District required';
+                                }
+                                return null;
+                              }))),
+                              Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          width: width * 0.9,
+                          child: TextFormField(
+                              controller: cityController,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
+                              cursorColor: Colors.black,
+                              decoration: const InputDecoration(
+                                label: Text('City'),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        width: 0.5, color: Colors.grey)),
+                              ),
+                              validator: ((value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'District required';
+                                }
+                                return null;
+                              }))),
+
+                      // Container(
+                      //     margin: const EdgeInsets.symmetric(vertical: 10),
+                      //     width: width * 0.9,
+                      //     child: TextFormField(
+                      //         controller: addressController,
+                      //         keyboardType: TextInputType.text,
+                      //         textCapitalization: TextCapitalization.words,
+                      //         textInputAction: TextInputAction.next,
+                      //         cursorColor: Colors.black,
+                      //         decoration: const InputDecoration(
+                      //           label: Text('Address'),
+                      //           enabledBorder: OutlineInputBorder(
+                      //               borderSide: BorderSide(
+                      //                   width: 0.5, color: Colors.grey)),
+                      //         ),
+                      //         validator: ((value) {
+                      //           if (value == null || value.isEmpty) {
+                      //             return 'Address required';
+                      //           }
+                      //           return null;
+                      //         }))),
                     ],
                   ),
                 ),
@@ -353,26 +539,36 @@ class _ClientPageState extends State<ClientPage> {
           height: 70,
           width: width * 0.85,
           child: ElevatedButton(
-              onPressed: isLoading == true ? null : () async {
-                if (_formKey.currentState!.validate()) {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await addClient().then((value) async {
-                    if (value == true) {
-                      Navigator.pop(context);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Unexpected error')));
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  });
-                }
-              },
+              onPressed: isLoading == true
+                  ? null
+                  : () async {
+                      if (_formKey.currentState!.validate()) {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        await addClient().then((value) async {
+                          if (value == true) {
+                            Navigator.pop(context);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Unexpected error')));
+                            setState(() {
+                              isLoading = false;
+                            });
+                          }
+                        });
+                      }
+                    },
               child: isLoading == false
-                  ? Text(widget.clientModel==null?'Save': 'Edit')
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.save),
+                      const SizedBox(width: 10,),
+                      Text(widget.clientModel == null ? 'Save' : 'Edit', style: const TextStyle(fontSize: 22),),
+                    ],
+                  )
                   : const CircularProgressIndicator(color: Colors.white)),
         ));
   }

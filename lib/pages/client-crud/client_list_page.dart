@@ -75,7 +75,7 @@ class _ClientListPageState extends State<ClientListPage> {
                                           textAlign: TextAlign.center,
                                         ),
                                         subtitle: Text(
-                                            'CPF/CNPJ: ${listClientModel[index].cpfCnpjClient.toString()} \nBorn Date: $bornDateMask \nE-mail: ${listClientModel[index].emailClient.toString()} \nAddress:  ${listClientModel[index].addressClient.toString()} ',
+                                            'CPF/CNPJ: ${listClientModel[index].cpfCnpjClient.toString()} \nBorn Date: $bornDateMask \nE-mail: ${listClientModel[index].emailClient.toString()}',
                                             textAlign: TextAlign.center),
                                         trailing: Container(
                                           width: 100,
