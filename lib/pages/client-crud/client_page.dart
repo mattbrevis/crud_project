@@ -447,7 +447,7 @@ class _ClientPageState extends State<ClientPage> {
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           width: width * 0.9,
                           child: TextFormField(
-                              controller: cityController,
+                              controller: addressController,
                               keyboardType: TextInputType.text,
                               textCapitalization: TextCapitalization.words,
                               textInputAction: TextInputAction.next,
@@ -502,7 +502,7 @@ class _ClientPageState extends State<ClientPage> {
                               ),
                               validator: ((value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'District required';
+                                  return 'City required';
                                 }
                                 return null;
                               }))),
