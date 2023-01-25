@@ -1,4 +1,4 @@
-class AddressModel {
+class AddressClientModel {
   String? cep;
   String? city;
   String? district;
@@ -6,7 +6,7 @@ class AddressModel {
   String? uf;
   
 
-  AddressModel(
+  AddressClientModel(
       {this.cep,
       this.city,
       this.district,
@@ -14,13 +14,22 @@ class AddressModel {
       this.uf,
       });
 
-  AddressModel.fromJson(Map<String, dynamic> json) {
+  AddressClientModel.fromJson(Map<String, dynamic> json) {
     cep = json['cep'];
     city = json['logradouro'];
     district = json['bairro'];
     address = json['localidade'];
     uf = json['uf'];
-    
+  }
+  
+  toMap(){
+    return {
+      'cep' : cep,
+      'city' : city,
+      'district' : district,
+      'address' : address,
+      'uf' : uf,
+    };
   }
 
   

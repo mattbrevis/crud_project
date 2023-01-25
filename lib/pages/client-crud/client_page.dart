@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:crud_project/model/address_model.dart';
+import 'package:crud_project/repositories/cep_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,7 +28,7 @@ class _ClientPageState extends State<ClientPage> {
   final nameController = TextEditingController();
   final cpfController = TextEditingController();
   final cnpjController = TextEditingController();
-  final bornDateController = TextEditingController(text: '01/01/1999');
+  final bornDateController = TextEditingController();
   final emailController = TextEditingController();
   final cepController = TextEditingController();
   final ufController = TextEditingController();
@@ -106,9 +107,11 @@ class _ClientPageState extends State<ClientPage> {
       if (widget.clientModel!.address != null) {
         cepController.text = widget.clientModel!.address!.cep.toString();
         ufController.text = widget.clientModel!.address!.uf.toString();
-        districtController.text = widget.clientModel!.address!.district.toString();
-        cityController.text = widget.clientModel!.address!.city.toString();        
-        addressController.text = widget.clientModel!.address!.address.toString();
+        districtController.text =
+            widget.clientModel!.address!.district.toString();
+        cityController.text = widget.clientModel!.address!.city.toString();
+        addressController.text =
+            widget.clientModel!.address!.address.toString();
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -124,7 +127,7 @@ class _ClientPageState extends State<ClientPage> {
         isPessoaJuridica == 0 ? cpfController.text : cnpjController.text;
 
     try {
-      final addressClient = AddressModel(
+      final addressClient = AddressClientModel(
           cep: cepController.text,
           uf: ufController.text,
           district: districtController.text,
@@ -219,9 +222,12 @@ class _ClientPageState extends State<ClientPage> {
                             textCapitalization: TextCapitalization.words,
                             textInputAction: TextInputAction.next,
                             cursorColor: Colors.black,
-                            decoration: const InputDecoration(
-                              label: Text('Name'),
-                              enabledBorder: OutlineInputBorder(
+                            decoration:  InputDecoration(
+                              floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
+                              label: const Text('Name'),                              
+                              hintText: isPessoaJuridica==0 ? 'Your Name Here' :'Your Company Name',
+                              enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 0.5, color: Colors.grey)),
                             ),
@@ -246,6 +252,8 @@ class _ClientPageState extends State<ClientPage> {
                                   CpfInputFormatter()
                                 ],
                                 decoration: const InputDecoration(
+                                  floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                   label: Text('CPF'),
                                   hintText: '999.999.999-99',
                                   enabledBorder: OutlineInputBorder(
@@ -277,6 +285,9 @@ class _ClientPageState extends State<ClientPage> {
                                 ],
                                 decoration: const InputDecoration(
                                   label: Text('CNPJ'),
+                                  hintText: '88.888.8888-88',
+                                  floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
@@ -306,7 +317,10 @@ class _ClientPageState extends State<ClientPage> {
                                 ],
                                 cursorColor: Colors.black,
                                 decoration: const InputDecoration(
+                                  floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                   label: Text('Born Date'),
+                                  hintText: '01/01/1990',
                                   enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 0.5, color: Colors.grey)),
@@ -331,7 +345,10 @@ class _ClientPageState extends State<ClientPage> {
                             textInputAction: TextInputAction.next,
                             cursorColor: Colors.black,
                             decoration: const InputDecoration(
+                              floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                               label: Text('E-mail'),
+                              hintText: 'email@example.com',
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 0.5, color: Colors.grey)),
@@ -359,8 +376,10 @@ class _ClientPageState extends State<ClientPage> {
                               TelefoneInputFormatter()
                             ],
                             decoration: const InputDecoration(
-                              
+                              floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                               label: Text('Phone'),
+                              hintText: '(99) 99999-9999',
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       width: 0.5, color: Colors.grey)),
@@ -368,7 +387,7 @@ class _ClientPageState extends State<ClientPage> {
                             validator: ((value) {
                               if (value == null || value.isEmpty) {
                                 return 'Phone is required';
-                              } 
+                              }
                               return null;
                             }),
                           )),
@@ -388,17 +407,19 @@ class _ClientPageState extends State<ClientPage> {
                                       CepInputFormatter()
                                     ],
                                     decoration: const InputDecoration(
-                                      label: Text('CEP'),
+                                      label: Text('Zip Code'),
+                                      labelStyle: TextStyle(),
                                       hintText: '00.000-000',
+                                      floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                       enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               width: 0.5, color: Colors.grey)),
                                     ),
                                     validator: ((value) {
                                       if (value == null || value.isEmpty) {
-                                        return 'CEP is required';
+                                        return 'Zip Code is required';
                                       }
-
                                       return null;
                                     })),
                               ),
@@ -408,33 +429,51 @@ class _ClientPageState extends State<ClientPage> {
                               SizedBox(
                                 width: width * 0.4,
                                 height: 50,
-                                child: ElevatedButton(                                    
-                                    onPressed: () {},
+                                child: ElevatedButton(
+                                    onPressed: () async {
+                                      await ICepRepository.instance
+                                          .getAddress(
+                                              UtilBrasilFields.removeCaracteres(
+                                                  cepController.text))
+                                          .then((value) {
+                                        setState(() {
+                                          addressController.text =
+                                              value.address.toString();
+                                          districtController.text =
+                                              value.district.toString();
+                                          cityController.text =
+                                              value.city.toString();
+                                          ufController.text =
+                                              value.uf.toString();
+                                        });
+                                      });
+                                    },
                                     child: Row(
-                                      children: const[
-                                        Icon(Icons.search),
-                                        SizedBox(width: 15,),
-                                        Text('Check CEP',style: TextStyle(fontSize: 18),),
+                                      children: const [
+                                        SizedBox(
+                                          width: 15,
+                                        ),
+                                        Text(
+                                          'Zip Code',
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        Expanded(child: Icon(Icons.search)),
                                       ],
                                     )),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
-                              SizedBox(
-                                width: 60,
+                              Expanded(                                
                                 child: TextFormField(
                                   textAlign: TextAlign.center,
                                   controller: ufController,
                                   enabled: false,
                                   cursorColor: Colors.black,
                                   decoration: const InputDecoration(
-                                    label: Text(
-                                      'UF',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    contentPadding: EdgeInsets.fromLTRB(
-                                        20.0, 10.0, 20.0, 10.0),
+                                    floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
+                                    hintText: 'UF',                                    
                                     enabledBorder: OutlineInputBorder(
                                         borderSide: BorderSide(
                                             width: 0.5, color: Colors.grey)),
@@ -453,6 +492,8 @@ class _ClientPageState extends State<ClientPage> {
                               textInputAction: TextInputAction.next,
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
+                                floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                 label: Text('Address'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -474,6 +515,8 @@ class _ClientPageState extends State<ClientPage> {
                               textInputAction: TextInputAction.next,
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
+                                floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                 label: Text('District'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -485,7 +528,7 @@ class _ClientPageState extends State<ClientPage> {
                                 }
                                 return null;
                               }))),
-                              Container(
+                      Container(
                           margin: const EdgeInsets.symmetric(vertical: 10),
                           width: width * 0.9,
                           child: TextFormField(
@@ -495,6 +538,8 @@ class _ClientPageState extends State<ClientPage> {
                               textInputAction: TextInputAction.next,
                               cursorColor: Colors.black,
                               decoration: const InputDecoration(
+                                floatingLabelBehavior:
+                                          FloatingLabelBehavior.always,
                                 label: Text('City'),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -505,29 +550,7 @@ class _ClientPageState extends State<ClientPage> {
                                   return 'City required';
                                 }
                                 return null;
-                              }))),
-
-                      // Container(
-                      //     margin: const EdgeInsets.symmetric(vertical: 10),
-                      //     width: width * 0.9,
-                      //     child: TextFormField(
-                      //         controller: addressController,
-                      //         keyboardType: TextInputType.text,
-                      //         textCapitalization: TextCapitalization.words,
-                      //         textInputAction: TextInputAction.next,
-                      //         cursorColor: Colors.black,
-                      //         decoration: const InputDecoration(
-                      //           label: Text('Address'),
-                      //           enabledBorder: OutlineInputBorder(
-                      //               borderSide: BorderSide(
-                      //                   width: 0.5, color: Colors.grey)),
-                      //         ),
-                      //         validator: ((value) {
-                      //           if (value == null || value.isEmpty) {
-                      //             return 'Address required';
-                      //           }
-                      //           return null;
-                      //         }))),
+                              }))),                      
                     ],
                   ),
                 ),
@@ -562,13 +585,18 @@ class _ClientPageState extends State<ClientPage> {
                     },
               child: isLoading == false
                   ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.save),
-                      const SizedBox(width: 10,),
-                      Text(widget.clientModel == null ? 'Save' : 'Edit', style: const TextStyle(fontSize: 22),),
-                    ],
-                  )
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.save),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          widget.clientModel == null ? 'Save' : 'Edit',
+                          style: const TextStyle(fontSize: 22),
+                        ),
+                      ],
+                    )
                   : const CircularProgressIndicator(color: Colors.white)),
         ));
   }

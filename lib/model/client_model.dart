@@ -17,7 +17,7 @@ class ClientModel {
   DateTime bornDate;
   String emailClient;
   String phone;
-  AddressModel? address;
+  AddressClientModel? address;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,7 +26,7 @@ class ClientModel {
       'cpfCnpjClient': cpfCnpjClient,
       'bornDate': bornDate,
       'emailClient': emailClient,
-      'addressClient': address,
+      'address' : address
     };
   }
 
