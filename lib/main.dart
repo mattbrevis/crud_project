@@ -15,11 +15,12 @@ class MyApp extends StatelessWidget {
       title: 'CRUD Examples',
       theme: ThemeData(
           primarySwatch: Colors.indigo,
-          elevatedButtonTheme: ElevatedButtonThemeData(
+          elevatedButtonTheme: ElevatedButtonThemeData(            
               style: ElevatedButton.styleFrom(
+              side: const BorderSide(color: Colors.white, width: 0.5),
             backgroundColor: Colors.indigo,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
+            foregroundColor: Colors.white,            
+            shape: RoundedRectangleBorder(                        
               borderRadius: BorderRadius.circular(30.0),
             ),
           ))),

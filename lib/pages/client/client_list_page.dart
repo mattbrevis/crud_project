@@ -62,7 +62,7 @@ class _ClientListPageState extends State<ClientListPage> {
                                 String subtitle = '';
                                 String dataClientComplete =
                                     'City: ${clientModel.address?.city.toString()} UF: ${clientModel.address?.uf.toString()}\nDistrict: ${clientModel.address?.district.toString()}\nAddress: ${clientModel.address?.address.toString()} \nZip-Code: ${clientModel.address?.cep.toString()}  \nBorn Date: $bornDateMask \nE-mail: ${clientModel.emailClient.toString()}';
-                                if (clientModel.nameClient.length ==
+                                if (clientModel.nameClient.length <
                                     14) {
                                   title =
                                       'Name: ${clientModel.nameClient}';
