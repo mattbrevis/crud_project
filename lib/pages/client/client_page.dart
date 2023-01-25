@@ -102,7 +102,7 @@ class _ClientPageState extends State<ClientPage> {
         bornDateController.text =
             UtilData.obterDataDDMMAAAA(widget.clientModel!.bornDate);
         emailController.text = widget.clientModel!.emailClient.toString();
-        phoneController.text = widget.clientModel!.phone;
+        phoneController.text = widget.clientModel!.phoneClient;
         if (widget.clientModel!.cpfCnpjClient.length == 14) {
           cpfController.text = widget.clientModel!.cpfCnpjClient.toString();
           isPessoaJuridica = 0;
@@ -138,6 +138,7 @@ class _ClientPageState extends State<ClientPage> {
           cep: cepController.text,
           uf: ufController.text,
           district: districtController.text,
+          address: addressController.text,
           city: cityController.text);
 
       final clientModel = ClientModel(
@@ -146,7 +147,7 @@ class _ClientPageState extends State<ClientPage> {
           cpfCnpjClient: cpfCnpjClient,
           bornDate: UtilData.obterDateTime(bornDateController.text),
           emailClient: emailController.text,
-          phone: phoneController.text,
+          phoneClient: phoneController.text,
           address: addressClient);
       if (widget.clientModel == null) {
         await ClientRepository(VirtualDB()).insert(clientModel);
@@ -430,7 +431,7 @@ class _ClientPageState extends State<ClientPage> {
                                     },
                                     validator: ((value) {
                                       if (value == null || value.isEmpty) {
-                                        clearAddress();
+                                        //clearAddress();
                                         return 'Zip Code is required';
                                       }
                                       return null;

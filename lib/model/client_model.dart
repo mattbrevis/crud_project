@@ -8,7 +8,7 @@ class ClientModel {
     required this.cpfCnpjClient,
     required this.bornDate,
     required this.emailClient,    
-    required this.phone,
+    required this.phoneClient,
     this.address
   });
   int id;
@@ -16,7 +16,7 @@ class ClientModel {
   String cpfCnpjClient;
   DateTime bornDate;
   String emailClient;
-  String phone;
+  String phoneClient;
   AddressClientModel? address;
 
   Map<String, dynamic> toMap() {
@@ -26,7 +26,9 @@ class ClientModel {
       'cpfCnpjClient': cpfCnpjClient,
       'bornDate': bornDate,
       'emailClient': emailClient,
+      'phoneClient':phoneClient,
       'address' : address
+
     };
   }
 
@@ -37,7 +39,8 @@ class ClientModel {
       cpfCnpjClient: map['cpfCnpjClient'] as String,
       bornDate: map['bornDate'],
       emailClient: map['emailClient'] as String,  
-      phone: map['phone'] as String
+      phoneClient: map['phoneClient'] as String,      
+      address: map['address'] as AddressClientModel
     );
   }
 

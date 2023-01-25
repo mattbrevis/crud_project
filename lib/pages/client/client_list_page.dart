@@ -54,43 +54,43 @@ class _ClientListPageState extends State<ClientListPage> {
                               primary: false,
                               itemCount: listClientModel.length,
                               itemBuilder: ((context, index) {
+                                final clientModel = listClientModel[index];
                                 String bornDateMask = formatter
                                     .format(listClientModel[index].bornDate)
                                     .toString();
                                 String title = '';
                                 String subtitle = '';
                                 String dataClientComplete =
-                                    'City: ${listClientModel[index].address!.city.toString()}\nUF: ${listClientModel[index].address!.uf.toString()}\nDistrict: ${listClientModel[index].address!.district.toString()}\nZip-Code: ${listClientModel[index].address!.cep.toString()}  \nBorn Date: $bornDateMask \nE-mail: ${listClientModel[index].emailClient.toString()}';
-                                if (listClientModel[index].nameClient.length ==
+                                    'City: ${clientModel.address?.city.toString()} UF: ${clientModel.address?.uf.toString()}\nDistrict: ${clientModel.address?.district.toString()}\nAddress: ${clientModel.address?.address.toString()} \nZip-Code: ${clientModel.address?.cep.toString()}  \nBorn Date: $bornDateMask \nE-mail: ${clientModel.emailClient.toString()}';
+                                if (clientModel.nameClient.length ==
                                     14) {
                                   title =
-                                      'Name: ${listClientModel[index].nameClient}';
+                                      'Name: ${clientModel.nameClient}';
                                   subtitle =
-                                      'CPF: ${listClientModel[index].nameClient}\n$dataClientComplete';
+                                      'CPF: ${clientModel.cpfCnpjClient}\n$dataClientComplete';
                                 } else {
                                   title =
-                                      'Company: ${listClientModel[index].nameClient}';
+                                      'Company: ${clientModel.nameClient}';
                                   subtitle =
-                                      'CNPJ: ${listClientModel[index].nameClient}\n$dataClientComplete';
+                                      'CNPJ: ${clientModel.cpfCnpjClient}\n$dataClientComplete';
                                 }
                                 return Container(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 10.0, horizontal: 20.0),
                                   width: MediaQuery.of(context).size.width * .8,
-                                  height: 160,
+                                  height: 200,
                                   child: Card(
                                     elevation: 2,
                                     child: Container(
                                       height: 120,
                                       width: 120,
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.center,                                      
                                       child: ListTile(
                                         title: Text(
-                                          title.toUpperCase(),
-                                          textAlign: TextAlign.center,
+                                          title.toUpperCase(),                                        
                                         ),
                                         subtitle: Text(subtitle,
-                                            textAlign: TextAlign.center),
+                                           ),
                                         trailing: Container(
                                           width: 100,
                                           height: 120,
