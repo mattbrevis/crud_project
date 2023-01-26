@@ -25,6 +25,7 @@ class ClientPage extends StatefulWidget {
 }
 
 class _ClientPageState extends State<ClientPage> {
+  
   final nameController = TextEditingController();
   final cpfController = TextEditingController();
   final cnpjController = TextEditingController();
@@ -199,6 +200,7 @@ class _ClientPageState extends State<ClientPage> {
 
   @override
   Widget build(BuildContext context) {
+    final currentFocus = FocusScope.of(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -463,6 +465,9 @@ class _ClientPageState extends State<ClientPage> {
                                               value.city ?? '';
                                           ufController.text = value.uf ?? '';
                                           isLoadingAddress = false;
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
                                         });
                                       });
                                     },
