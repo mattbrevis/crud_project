@@ -48,7 +48,6 @@ class _ClientPageState extends State<ClientPage> {
   clearAddress() {
     ufController.text = '';
     cityController.text = '';
-    phoneController.text = '';
     addressController.text = '';
     districtController.text = '';
   }
@@ -95,6 +94,30 @@ class _ClientPageState extends State<ClientPage> {
         ),
       ],
     );
+  }
+  getAddressByZipCode(String cep, FocusScopeNode currentFocus)async {
+    setState(() {
+                                        isLoadingAddress = true;
+                                      });
+                                      await ICepRepository.instance
+                                          .getAddress(
+                                              UtilBrasilFields.removeCaracteres(
+                                                  cepController.text))
+                                          .then((value) {
+                                        setState(() {
+                                          addressController.text =
+                                              value.address ?? '';
+                                          districtController.text =
+                                              value.district ?? '';
+                                          cityController.text =
+                                              value.city ?? '';
+                                          ufController.text = value.uf ?? '';
+                                          isLoadingAddress = false;
+                                        if (!currentFocus.hasPrimaryFocus) {
+                                          currentFocus.unfocus();
+                                        }
+                                        });
+                                      });
   }
 
   getClient() {
@@ -432,6 +455,9 @@ class _ClientPageState extends State<ClientPage> {
                                     onChanged: (value) {
                                       clearAddress();
                                     },
+                                    onEditingComplete: (() {
+                                      getAddressByZipCode(cepController.text,currentFocus);
+                                    }),
                                     validator: ((value) {
                                       if (value == null || value.isEmpty) {
                                         //clearAddress();
@@ -447,29 +473,8 @@ class _ClientPageState extends State<ClientPage> {
                                 width: width * 0.4,
                                 height: 50,
                                 child: ElevatedButton(                                    
-                                    onPressed: isLoadingAddress ==true? null :() async {
-                                      setState(() {
-                                        isLoadingAddress = true;
-                                      });
-                                      await ICepRepository.instance
-                                          .getAddress(
-                                              UtilBrasilFields.removeCaracteres(
-                                                  cepController.text))
-                                          .then((value) {
-                                        setState(() {
-                                          addressController.text =
-                                              value.address ?? '';
-                                          districtController.text =
-                                              value.district ?? '';
-                                          cityController.text =
-                                              value.city ?? '';
-                                          ufController.text = value.uf ?? '';
-                                          isLoadingAddress = false;
-                                        if (!currentFocus.hasPrimaryFocus) {
-                                          currentFocus.unfocus();
-                                        }
-                                        });
-                                      });
+                                    onPressed: isLoadingAddress ==true? null :() {
+                                       getAddressByZipCode(cepController.text,currentFocus);
                                     },
                                     child: Row(
                                       children:  [

@@ -132,7 +132,7 @@ class _ClientListPageState extends State<ClientListPage> {
                               }))),
                     )
                   : const Center(
-                      child: Text('No data'),
+                      child: Text('No data', style: TextStyle(fontSize: 22),),
                     ),
             )
           : const Center(child: CircularProgressIndicator()),
