@@ -66,35 +66,33 @@ class _ClientListPageState extends State<ClientListPage> {
                                       'CNPJ: ${clientModel.cpfCnpjClient}\n$dataClientComplete';
                                 }
                                 return Card(
-                                  margin:const EdgeInsets.all(15.0) ,
+                                  margin: const EdgeInsets.all(15.0),
                                   elevation: 3,
                                   child: Container(
                                     alignment: Alignment.center,
                                     padding: const EdgeInsets.all(10),
                                     width:
                                         MediaQuery.of(context).size.width * .9,
-                                    height: 120,
+                                    height: 140,
                                     child: Row(children: [
                                       const SizedBox(
-                                        child: Center( 
-                                          child: Icon(Icons.person,),
+                                        child: Center(
+                                          child: Icon(
+                                            Icons.person,
+                                          ),
                                         ),
                                       ),
                                       SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              .6,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                title,                                               
-                                              ),
-                                              Expanded(child: Text(subtitle)),
-                                            ],
-                                          )),
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                .6,
+                                        child: ListTile(
+                                          title: Text('$title\n$subtitle'),
+                                        )
+                                      ),
                                       SizedBox(
-                                        width: MediaQuery.of(context).size.width * .2,                                                                                
+                                        width:
+                                            90,
                                         child: Row(children: [
                                           Expanded(
                                             child: IconButton(
@@ -132,7 +130,10 @@ class _ClientListPageState extends State<ClientListPage> {
                               }))),
                     )
                   : const Center(
-                      child: Text('No data', style: TextStyle(fontSize: 22),),
+                      child: Text(
+                        'No data',
+                        style: TextStyle(fontSize: 22),
+                      ),
                     ),
             )
           : const Center(child: CircularProgressIndicator()),
