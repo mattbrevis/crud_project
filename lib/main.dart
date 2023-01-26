@@ -13,12 +13,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CRUD Examples',
-      theme: ThemeData(      
-        primarySwatch: Colors.indigo,
-      ),
+      theme: ThemeData(
+          primarySwatch: Colors.indigo,
+          elevatedButtonTheme: ElevatedButtonThemeData(            
+              style: ElevatedButton.styleFrom(
+              side: const BorderSide(color: Colors.white, width: 0.5),
+            backgroundColor: Colors.indigo,
+            foregroundColor: Colors.white,            
+            shape: RoundedRectangleBorder(                        
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+          ))),
       home: const MyHomePage(title: 'CRUD Examples'),
-      debugShowCheckedModeBanner: false,      
+      debugShowCheckedModeBanner: false,
     );
   }
 }
-

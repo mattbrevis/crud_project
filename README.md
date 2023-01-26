@@ -1,14 +1,27 @@
 # crud_project
 
-<h1>This is a CRUD project without a database connection. </h1>
+<h1>CRUD Project.</h1>
+<p><b>- Client Example</b></p>
+First of all, I've created a class called VirtualDB to simulate a Database that will save the list of clients on memory while app is running. 
+Currently, this CRUD do not have a database conection. 
+I've implemented a repository pattern architecture.
 
-I've created a class called 'VirtualDB' to save the register on memory. 
-I have implemented a repository pattern too. 
-Currently, the project has one CRUD client as an example. 
-In this project, I use the package called 'brasil_fields', that helps me with some masks input, validation with CPF/CNPJ(document id for brazilians).  
-However, in the future, I may create more examples, such as; products, photos, and others
+<h1>Packages</h1>
+<p>
+    I use the package <a href="https://pub.dev/packages/brasil_fields"><b>brasil_fields</b></a>, to help me with some masks inputs and validations that are most used in Brazil.
+</p>
+    
+<p>
+    I've implemented the consume to the webservice <a href="https://viacep.com.br/"><b>ViaCEP</b></a> to retrieve the address Data from Zip Code. 
+</p>
+<p>
+    The package <a href="https://pub.dev/packages/http"><b>http</b></a> was used on the repository ICepRepository with the Http request.
+</p>
 
-<img height="300" width="150" src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
-<img height="300" width="150" src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true">              
-<img height="300" width="150" src="https://github.com/mattbrevis/crud_project/blob/main/images/3.jpeg?raw=true">
-<img height="300" width="150" src="https://github.com/mattbrevis/crud_project/blob/main/images/4.jpeg?raw=true">          
+
+In the future, I may create more examples, such as; products, photos, and others ideas with SQLite.
+<h1>PrintScreen</h1>
+<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
+<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true"> <br>             
+<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/3.jpeg?raw=true">
+<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/4.jpeg?raw=true">          

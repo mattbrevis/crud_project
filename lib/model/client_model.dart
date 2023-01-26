@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crud_project/model/address_model.dart';
 
 class ClientModel {
   ClientModel({
@@ -6,18 +7,17 @@ class ClientModel {
     required this.nameClient,
     required this.cpfCnpjClient,
     required this.bornDate,
-    required this.emailClient,
-    required this.addressClient,
+    required this.emailClient,    
+    required this.phoneClient,
+    this.address
   });
   int id;
   String nameClient;
   String cpfCnpjClient;
   DateTime bornDate;
   String emailClient;
-  String addressClient;
-
-  
-
+  String phoneClient;
+  AddressClientModel? address;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,7 +26,9 @@ class ClientModel {
       'cpfCnpjClient': cpfCnpjClient,
       'bornDate': bornDate,
       'emailClient': emailClient,
-      'addressClient': addressClient,
+      'phoneClient':phoneClient,
+      'address' : address
+
     };
   }
 
@@ -36,8 +38,9 @@ class ClientModel {
       nameClient: map['nameClient'] as String,
       cpfCnpjClient: map['cpfCnpjClient'] as String,
       bornDate: map['bornDate'],
-      emailClient: map['emailClient'] as String,
-      addressClient: map['addressClient'] as String,
+      emailClient: map['emailClient'] as String,  
+      phoneClient: map['phoneClient'] as String,      
+      address: map['address'] as AddressClientModel
     );
   }
 

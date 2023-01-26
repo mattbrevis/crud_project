@@ -39,6 +39,7 @@ dependencies:
   brasil_fields: ^1.9.0
   bottom_picker: ^2.0.1
   intl: ^0.17.0
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

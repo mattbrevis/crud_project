@@ -1,4 +1,4 @@
-import 'package:crud_project/pages/client-crud/client_list_page.dart';
+import 'package:crud_project/pages/client/client_list_page.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -13,43 +13,38 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SizedBox(
+    return Scaffold(      
+      body: Container(
+        color: Colors.indigo,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
+        
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: [            
+            const Text('Welcome to my CRUD Project :)',textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 25, color: Colors.white, )),
+            const SizedBox(
+              height: 80,
+            ),
             SizedBox(
-                width: 350,
-                height: 55,
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ClientListPage()));
-                    },
-                    child: const Text('CRUD - Client',
-                        style: TextStyle(color: Colors.white, fontSize: 22)))),
+              width: 350,
+              height: 55,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ClientListPage()));
+                },
+                child: const Text(
+                  'CRUD - Client',
+                  style: TextStyle(color: Colors.white, fontSize: 22),
+                ),
+              ),
+            ),
           ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        color: Colors.indigo,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.1,
-        child: const Center(
-          child: Text(
-            'Welcome :)',
-            style: TextStyle(
-                color: Colors.white, fontSize: 25, fontStyle: FontStyle.italic),
-            textAlign: TextAlign.center,
-          ),
         ),
       ),
     );
