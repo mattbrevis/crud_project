@@ -25,7 +25,7 @@ In the future, I may create more examples, such as; products, photos, and others
 </p>
 
 <h1>PrintScreen</h1>
-<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
-<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true"> <br>             
-<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/3.jpeg?raw=true">
-<img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/4.jpeg?raw=true">          
+<img src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
+<img src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true">              
+<img src="https://github.com/mattbrevis/crud_project/blob/main/images/3.jpeg?raw=true">
+<img src="https://github.com/mattbrevis/crud_project/blob/main/images/4.jpeg?raw=true">          
