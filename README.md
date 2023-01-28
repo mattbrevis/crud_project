@@ -1,6 +1,6 @@
 # crud_project
 
-<h1>CRUD Project.</h1>
+<h1>CRUD Project with Flutter</h1>
 <p><b>- Client Example</b></p>
 First of all, I've created a class called VirtualDB to simulate a Database that will save the list of clients on memory while app is running. 
 Currently, this CRUD do not have a database conection. 
@@ -20,6 +20,10 @@ I've implemented a repository pattern architecture.
 
 
 In the future, I may create more examples, such as; products, photos, and others ideas with SQLite.
+
+<p>
+</p>
+
 <h1>PrintScreen</h1>
 <img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/1.jpeg?raw=true">  
 <img height="300" width="200" src="https://github.com/mattbrevis/crud_project/blob/main/images/2.jpeg?raw=true"> <br>             
